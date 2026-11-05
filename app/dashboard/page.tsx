@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import AddWorkout from '@/components/AddWorkout'
+import DeleteWorkoutButton from '@/components/DeleteWorkoutButton'
 export default async function Dash() {
   const s = await getSession()
   if (!s) redirect('/login')
@@ -17,9 +18,12 @@ export default async function Dash() {
       <AddWorkout />
       <div className="space-y-2">
         {workouts.map((w: any) => (
-          <div key={w.id} className="bg-white p-3 rounded shadow flex justify-between text-sm">
+          <div key={w.id} className="bg-white p-3 rounded shadow flex justify-between items-center text-sm">
             <div><span className="font-medium">{w.exercise}</span> <span className="text-gray-500">{w.sets}×{w.reps}</span></div>
-            <span className="text-xs text-gray-400">{w.date}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-gray-400">{w.date}</span>
+              <DeleteWorkoutButton id={w.id} />
+            </div>
           </div>
         ))}
         {workouts.length === 0 && <p className="text-gray-500">No workouts yet</p>}
